@@ -1,8 +1,8 @@
 import json
 import re
-import requests
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 
+import requests
 from tqdm import tqdm
 
 
@@ -55,12 +55,12 @@ def a_single_download(info):
 
 def concurrent_download(base_infos):
     executor = ThreadPoolExecutor(max_workers=10)
-    futur_tasks = [executor.submit(a_single_download(), info) for info in base_infos]
+    futur_tasks = [executor.submit(a_single_download, info) for info in base_infos]
     wait(futur_tasks, return_when=ALL_COMPLETED)
 
 
 if __name__ == '__main__':
-    # html_url = "https://www.bilibili.com/video/BV1dS4y167y5?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
-    html_url = "https://www.bilibili.com/video/BV1Qq4y1y7QN?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
+    html_url = "https://www.bilibili.com/video/BV1WK411G7QH?from=search&seid=7191898810218274580&spm_id_from=333.337.0.0"
+    # html_url = "https://www.bilibili.com/video/BV1Qq4y1y7QN?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
     base_infos = get_url(html_url)
-    a_single_download(base_infos[0])
+    concurrent_download(base_infos)
