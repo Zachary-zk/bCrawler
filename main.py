@@ -3,6 +3,8 @@ import re
 import requests
 from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 
+from tqdm import tqdm
+
 
 def get_response(html_url, stream=False):
     headers = {
@@ -14,9 +16,9 @@ def get_response(html_url, stream=False):
 
 
 def get_url(html_url):
-    r = get_response(html_url)
-    a = re.search(r"window\.__INITIAL_STATE__=(.*?);", r.text).group(1)
-    json_data = json.loads(a, strict=False)
+    r = requests.get(html_url)
+    a = re.search(r"window\.__INITIAL_STATE__=(.*?)};", r.text).group(1)
+    json_data = json.loads(a + "}")
     video_data = json_data['videoData']
     avid = str(video_data['aid'])
     qn = '112'
@@ -38,7 +40,7 @@ def save(video_url, video_size, title):
     video_res = get_response(video_url, True)
     with open(title + '.mp4', 'wb') as fd:
         print('开始下载文件：{}, 当前文件大小：{}KB'.format(title, video_size / 1024))
-        for c in tqdm(iterable=video_res.iter_content(), total=video_size, unit='k', desc=None):
+        for c in tqdm(iterable=video_res.iter_content(), total=video_size, unit='b', desc=None):
             fd.write(c)
         print('{},文件下载成功'.format(title))
 
@@ -58,6 +60,7 @@ def concurrent_download(base_infos):
 
 
 if __name__ == '__main__':
-    html_url = "https://www.bilibili.com/video/BV1dS4y167y5?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
+    # html_url = "https://www.bilibili.com/video/BV1dS4y167y5?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
+    html_url = "https://www.bilibili.com/video/BV1Qq4y1y7QN?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
     base_infos = get_url(html_url)
     a_single_download(base_infos[0])
