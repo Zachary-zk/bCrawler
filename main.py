@@ -60,7 +60,9 @@ def concurrent_download(base_infos):
 
 
 if __name__ == '__main__':
-    html_url = "https://www.bilibili.com/video/BV1WK411G7QH?from=search&seid=7191898810218274580&spm_id_from=333.337.0.0"
-    # html_url = "https://www.bilibili.com/video/BV1Qq4y1y7QN?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
+    # html_url = "https://www.bilibili.com/video/BV1WK411G7QH?from=search&seid=7191898810218274580&spm_id_from=333.337.0.0"
+    html_url = "https://www.bilibili.com/video/BV1Qq4y1y7QN?from=search&seid=4946859608231270468&spm_id_from=333.337.0.0"
     base_infos = get_url(html_url)
+    print(base_infos)
     concurrent_download(base_infos)
+
